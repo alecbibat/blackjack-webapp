@@ -9,17 +9,25 @@ set :sessions, true
 
 
 get '/' do
-  "Hello World!"
+  # This should validate that a username is set
+  # If a username is not set, then redirect to a form to set the username
+  if session[:player_name]
+    redirect "/game"
+  else
+    redirect "/new_player"
+  end
 end
 
-get '/test' do
-  "From test action"
+get "/new_player" do
+  erb :new_player
 end
 
-get '/template' do
-  erb :template
+post "/new_player" do
+  session[:player_name] = params[:player_name]
+  redirect "/game"
 end
 
-get '/signup' do
-  erb :'/signup/signup'
+get "/game" do
+  # set up initial values
+  # render the template
 end
