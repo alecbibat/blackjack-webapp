@@ -66,8 +66,13 @@ get "/new_player" do
 end
 
 post "/new_player" do
+  if params[:player_name].empty?
+    @error = "Name is required."
+    erb :new_player
+  else
   session[:player_name] = params[:player_name]
   redirect "/game"
+  end
 end
 
 before do
