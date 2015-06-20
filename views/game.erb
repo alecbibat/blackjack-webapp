@@ -5,7 +5,7 @@
 <div class='well'>
 Dealer's Cards:
 <% session[:dealer_cards].each do |card| %>
-    <li><%= card.to_s %></li>
+    <%= card_image(card) %>
   <% end %>
 </div>
 
@@ -15,7 +15,7 @@ Dealer's Cards:
 Player's Cards:
 
 <% session[:player_cards].each do |card| %>
-  <li><%= card.to_s %></li>
+  <%= card_image(card) %>
 <% end %>
 </div>
 

@@ -28,6 +28,27 @@ helpers do
 
     total
   end
+
+  def card_image(card) # takes ['H', '5'] ; needs to return string <img src='public/images/cards/hearts_5.jpg'>
+  suit = case card[0]
+  when 'H' then 'hearts'
+  when 'D' then 'diamonds'
+  when 'C' then 'clubs'
+  when 'S' then 'spades'
+  end
+
+  if ['J', 'Q', 'K', 'A'].include?(card[1])
+    value = case card[1]
+    when 'J' then 'jack'
+    when 'Q' then 'queen'
+    when 'K' then 'king'
+    when 'A' then 'ace'
+    end
+  else
+    value = card[1]
+  end
+  "<img src='/images/cards/#{suit}_#{value}.jpg'>"
+  end
 end
 
 get '/' do
