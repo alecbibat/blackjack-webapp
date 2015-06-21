@@ -6,3 +6,12 @@ margin-right: 5px;
 form#stay_button {
 float: left;
 }
+
+form#play_again_yes {
+  float: left;
+  margin-right: 5px;
+}
+
+form#play_again_no {
+  float: left;
+}

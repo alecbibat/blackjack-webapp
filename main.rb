@@ -49,6 +49,27 @@ helpers do
   end
   "<img src='/images/cards/#{suit}_#{value}.jpg'>"
   end
+
+  def winner!(msg)
+    @success = "#{session[:player_name]} wins!"
+    @show_dealer_cards = true
+    @show_buttons = false
+    @play_again = true
+  end
+
+  def loser!(msg)
+    @error = "Dealer wins!"
+    @show_dealer_cards = true
+    @show_buttons = false
+    @play_again = true
+  end
+
+  def tie!(msg)
+    @success = "It was a tie!"
+    @show_dealer_cards = true
+    @show_buttons = false
+    @play_again = true
+  end
 end
 
 get '/' do
@@ -59,6 +80,10 @@ get '/' do
   else
     redirect "/new_player"
   end
+end
+
+get '/gameover' do
+  erb :game_over
 end
 
 get "/new_player" do
@@ -77,6 +102,9 @@ end
 
 before do
   @show_buttons = true
+  @show_dealer_button = false
+  @show_dealer_cards = false
+  @play_again = false
 end
 
 get "/game" do
@@ -99,8 +127,44 @@ get "/game" do
 end
 
 post '/game/player/stay' do
-  @success = "You chose to stay. Boring."
+  redirect '/dealer_turn'
+end
+
+get '/dealer_turn' do
   @show_buttons = false
+  dealer_total = calculate_total(session[:dealer_cards])
+  if dealer_total == 21
+    redirect '/compare'
+  elsif dealer_total > 21
+    winner!('msg')
+  elsif dealer_total <= 17
+    @success = "The dealer chose to hit."
+    @show_dealer_button = true
+  else
+    @success = "The dealer chose to stay."
+    redirect '/compare'
+  end
+  erb :game
+end
+
+get '/compare' do
+  
+  dealer_total = calculate_total(session[:dealer_cards])
+  player_total = calculate_total(session[:player_cards])
+
+  if player_total > dealer_total
+    winner!('msg')
+  elsif dealer_total > player_total
+    loser!('msg')
+  elsif dealer_total == player_total
+    tie!('msg')
+  end
+  erb :game
+end
+
+post '/dealer/hit' do
+  session[:dealer_cards] << session[:deck].pop
+  redirect '/dealer_turn'
   erb :game
 end
 
@@ -113,6 +177,7 @@ post '/game/player/hit' do
   elsif player_total > 21
     @error = "Sorry! You busted!"
     @show_buttons = false
+    @play_again = true
     erb :game
   else
     erb :game
