@@ -3,7 +3,7 @@
 <p>Welcome <%= session[:player_name] %>!</p>
 <% if @play_again %>
 <p><strong>Play again?</strong></p>
-      <form id='play_again_yes' action='/game' method='get'>
+      <form id='play_again_yes' action='/bet' method='get'>
       <input type='submit' class='btn btn-primary' value="Yes" />
     </form>
     <form id='play_again_no' action='/gameover' method='get'>

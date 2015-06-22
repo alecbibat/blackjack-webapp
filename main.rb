@@ -55,6 +55,8 @@ helpers do
     @show_dealer_cards = true
     @show_buttons = false
     @play_again = true
+    session[:player_money] += session[:player_bet].to_i
+    erb :game
   end
 
   def loser!(msg)
@@ -62,6 +64,8 @@ helpers do
     @show_dealer_cards = true
     @show_buttons = false
     @play_again = true
+    session[:player_money] -= session[:player_bet].to_i
+    erb :game
   end
 
   def tie!(msg)
@@ -69,6 +73,7 @@ helpers do
     @show_dealer_cards = true
     @show_buttons = false
     @play_again = true
+    erb :game
   end
 end
 
@@ -86,7 +91,8 @@ get '/gameover' do
   erb :game_over
 end
 
-get "/new_player" do
+get '/new_player' do
+  session[:player_money] = 500
   erb :new_player
 end
 
@@ -95,8 +101,8 @@ post "/new_player" do
     @error = "Name is required."
     erb :new_player
   else
-  session[:player_name] = params[:player_name]
-  redirect "/game"
+  session[:player_name] = params[:player_name].capitalize
+  erb :bet
   end
 end
 
@@ -124,6 +130,24 @@ get "/game" do
   # render the template
   # add redirect back to '/' if no player name exists
   erb :game
+end
+
+get '/bet' do
+  erb :bet
+end
+
+post '/bet' do
+session[:player_bet] = params[:player_bet]
+player_bet = session[:player_bet].to_i
+  if player_bet > session[:player_money]
+    @error = "Your bet can't be more than you have!"
+    erb :bet
+  elsif player_bet == 0 
+    @error = 'Your bet must be a non-zero integer!'
+    erb :bet
+  else
+    redirect '/game'
+  end
 end
 
 post '/game/player/stay' do
@@ -172,13 +196,9 @@ post '/game/player/hit' do
   session[:player_cards] << session[:deck].pop
   player_total = calculate_total(session[:player_cards])
   if player_total == 21
-    @success = "You hit blackjack!"
-    erb :game
+    winner!('msg')
   elsif player_total > 21
-    @error = "Sorry! You busted!"
-    @show_buttons = false
-    @play_again = true
-    erb :game
+    loser!('msg')
   else
     erb :game
   end

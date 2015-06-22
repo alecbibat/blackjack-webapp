@@ -1,0 +1,8 @@
+<h3>Betting</h3>
+<p>How much would you like to bet?</p>
+You have $<%= session[:player_money].to_s %>
+<form action='/bet' method='post'>
+<input type='text' name='player_bet'/>
+</br>
+<input type='submit' class='btn' />
+</form>
