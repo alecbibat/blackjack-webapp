@@ -1,6 +1,16 @@
+<div id='game'>
 <h1>Blackjack</h1>
 
 <p>Welcome <%= session[:player_name] %>!</p>
+
+    <%if @error %>
+      <div class="alert alert-error"><%=@error%></div>
+    <% end %>
+
+    <%if @success %>
+      <div class="alert alert-success"><%=@success%></div>
+    <% end %>
+    
 <% if @play_again %>
 <p><strong>Play again?</strong></p>
       <form id='play_again_yes' action='/bet' method='get'>
@@ -37,7 +47,7 @@ Dealer's Cards:
 
 <br/>
 
-<div class='well'>
+<div id='player_cards' class='well'>
 Player's Cards:
 
 <% session[:player_cards].each do |card| %>
@@ -65,3 +75,4 @@ Player's Cards:
 </form>
 
 <% end %>
+</div>
