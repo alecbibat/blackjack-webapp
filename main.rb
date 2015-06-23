@@ -140,18 +140,14 @@ post '/bet' do
 session[:player_bet] = params[:player_bet]
 player_bet = session[:player_bet].to_i
   if player_bet > session[:player_money]
-    @error = "Your bet can't be more than you have!"
+    @bet_error = "Your bet can't be more than you have!"
     erb :bet
   elsif player_bet == 0 
-    @error = 'Your bet must be a non-zero integer!'
+    @bet_error = 'Your bet must be a non-zero integer!'
     erb :bet
   else
     redirect '/game'
   end
-end
-
-post '/game/player/stay' do
-  redirect '/dealer_turn'
 end
 
 get '/dealer_turn' do
@@ -189,7 +185,7 @@ end
 post '/dealer/hit' do
   session[:dealer_cards] << session[:deck].pop
   redirect '/dealer_turn'
-  erb :game
+  erb :game, layout: false
 end
 
 post '/game/player/hit' do
@@ -200,7 +196,7 @@ post '/game/player/hit' do
   elsif player_total > 21
     loser!('msg')
   else
-    erb :game
+    erb :game, layout: false
   end
   # check if player busted
   # if bust, game over

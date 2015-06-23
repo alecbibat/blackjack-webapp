@@ -16,8 +16,8 @@ $(document).ready(function(){
   $('form#stay_button input').click(function(){
     $(document).on('click', 'form#stay_button input', function(){
       $.ajax({
-        type: 'POST',
-        url: '/game/player/stay',
+        type: 'GET',
+        url: '/dealer_turn',
       }).done(function(msg){
         $('#game').replaceWith(msg)
       });

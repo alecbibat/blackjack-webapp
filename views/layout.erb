@@ -20,7 +20,9 @@
     </div>
 
   <div class="container">
-
+    <%if @bet_error %>
+      <div class="alert alert-error"><%=@bet_error%></div>
+    <% end %>
       <%= yield %>
   </div>
   </body>
