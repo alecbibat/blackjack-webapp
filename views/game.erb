@@ -10,7 +10,7 @@
     <%if @success %>
       <div class="alert alert-success"><%=@success%></div>
     <% end %>
-    
+
 <% if @play_again %>
 <p><strong>Play again?</strong></p>
       <form id='play_again_yes' action='/bet' method='get'>
@@ -37,7 +37,7 @@ Dealer's Cards:
 <% end %>
 
   <% if @show_dealer_button %>
-    <form action='/dealer/hit' method='post'>
+    <form id='dealer_hit_button' action='/dealer/hit' method='post'>
       <input type='submit' class='btn btn-primary' value="Show dealer's next card" />
     <form>
 
